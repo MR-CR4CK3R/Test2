@@ -172,10 +172,12 @@ def decode_protobuf(binary):
 @app.route('/like', methods=['GET'])
 def handle_requests():
     uid = request.args.get("uid")
-    server_name = request.args.get("server_name", "").upper()
-    if not uid or not server_name:
-        return jsonify({"error": "UID and server_name are required"}), 400
-
+    server_name = request.args.get("region", "").upper()
+    key = request.args.get('key')
+    if not uid or not server_name or not key:
+        return jsonify({"error": "UID, region and key are required"}), 400
+    if key !="TOC":
+        return jsonify({"error": "invalid key. Please provide correct api key."}), 400
     try:
         def process_request():
             tokens = load_tokens(server_name)
